@@ -60,32 +60,34 @@ window.addEventListener(
 ws.addEventListener('message', function(event) {
 
     // Вывод сообщения от сервера в чат
-    if(event.data){
-        pMessWS.innerText = event.data;
+
+
         let contentDivRes = '';
         contentDivRes = document.getElementById('messChat').innerHTML;
         divResult.innerHTML = contentDivRes;
-        divWStext.appendChild(pMessWS);
-        divMain2.appendChild(divWStext);
-        divResult.appendChild(divMain2);
-    }
+        if( pMessGeo.innerHTML ){
+            divGeoLoc.appendChild(pMessGeo);
+            divMain3.appendChild(divGeoLoc);
+            divResult.appendChild(divMain3);
+        }else if(pMessMy.innerHTML){
+            pMessWS.innerText = event.data;
+            divMytext.appendChild(pMessMy);
+            divMain.appendChild(divMytext);
+            divResult.appendChild(divMain);
+            divWStext.appendChild(pMessWS);
+            divMain2.appendChild(divWStext);
+            divResult.appendChild(divMain2);
+        }
 
 });
 
 // Обработка отправки сообщения
 sendButton.addEventListener('click', function() {
-    pMessMy.innerText = input.value;
+    pMessMy.innerHTML = input.value;
     // Отправка сообщения на сервер
-    ws.send(pMessMy.innerText);
+    ws.send(pMessMy.innerHTML);
     // Очистка поля ввода
     input.value = '';
-    let contentDivRes = '';
-    contentDivRes = document.getElementById('messChat').innerHTML;
-    divResult.innerHTML = contentDivRes;
-    divMytext.appendChild(pMessMy);
-    divMain.appendChild(divMytext);
-    divResult.appendChild(divMain);
-
 });
 
 // Обработка отправки гео-локации
@@ -95,25 +97,10 @@ geoButton.addEventListener('click', function() {
         let longitude = position.coords.longitude;
         // Вывод ссылки на OpenStreetMap
         let link = 'https://www.openstreetmap.org/?mlat=' + latitude + '&mlon=' + longitude;
-        let contentDivRes = '';
-        contentDivRes = document.getElementById('messChat').innerHTML;
-        divResult.innerHTML = '';
+        ws.send(latitude + ' ' + longitude);
         pMessGeo.innerHTML = '<a class="text-white" href="' + link + '">Ваша гео-локация</a>';
-        divResult.innerHTML = contentDivRes;
-        divGeoLoc.appendChild(pMessGeo);
-        divMain3.appendChild(divGeoLoc);
-        divResult.appendChild(divMain3);
     }, function() {
         console.error('Не удалось получить гео-локацию');
     });
 });
 
-function setNewValue(){
-
-    if(divWStext){
-        divMain2.appendChild(divWStext);
-        divResult.appendChild(divMain2);
-        divWStext.innerHTML = '';
-    }
-
-}
