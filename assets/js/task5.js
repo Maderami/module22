@@ -37,7 +37,7 @@ geoButton.classList.add('col-lg-3');
 geoButton.innerText = 'Запрос локации';
 divResult.id = 'messChat';
 divResult.classList.add('row');
-let ws = new WebSocket('wss://echo-ws-service.herokuapp.com/');
+const ws = new WebSocket('wss://echo-ws-service.herokuapp.com/');
 // Функция для создания чата на основе эхо-сервера
 function createChat(sendButton, geoButton, input, divResult) {
     // Добавление элементов в DOM
@@ -53,15 +53,10 @@ window.addEventListener(
     }
 )
 
-// Создание WebSocket соединения
-
-
 // Обработка сообщений от сервера
 ws.addEventListener('message', function(event) {
 
     // Вывод сообщения от сервера в чат
-
-
         let contentDivRes = '';
         contentDivRes = document.getElementById('messChat').innerHTML;
         divResult.innerHTML = contentDivRes;
